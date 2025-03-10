@@ -8,7 +8,7 @@ function App() {
 	const [App, setApp] = useState<"dbus" | "api" | undefined>();
 
 
-	function startDbus() {
+	function start_dbus() {
 		console.log("xd")
 		setApp("dbus")
 	}
@@ -17,15 +17,14 @@ function App() {
 	useEffect(() => {
 		if (App == "api") {
 			(async () => { await Init("api") })()
+		}else if(App == "dbus") {
+			(async () => { await Init("dbus") })()
 		}
-
 	}, [App])
 
-
-
-	return (
+	return App ? <Player/>  : (
 		<div className='home'>
-			<button onClick={() => startDbus()}>Dbus (Linux Only)</button>
+			<button onClick={() => start_dbus()}>Dbus (Linux Only)</button>
 			<button onClick={() => setApp("api")}>Spotify Api</button>
 		</div>
 	)

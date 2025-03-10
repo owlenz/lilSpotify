@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import logo from './assets/images/logo-universal.png';
-import { IoPauseOutline, IoPlayOutline, IoPlaySkipBackOutline, IoPlaySkipForwardOutline } from "react-icons/io5"
 import { ChangeState, CurrentSong, NextSong, OpenApp, PrevSong, Seek } from "../wailsjs/go/App/App.js"
-
+import { BsFillPauseFill, BsFillSkipBackwardFill, BsFillSkipForwardFill, BsFillPlayFill } from "react-icons/bs";
 type appStatus = "opened" | "closed"
 type playbackStatus = "Paused" | "Playing"
 
@@ -19,13 +18,12 @@ export type Metadata = {
 	"positionF": string
 	"lengthR": string
 	"trackId": string
-
 }
 
 function Player() {
 	const [appStatus, setAppStatus] = useState<boolean | undefined>();
 	const [status, setStatus] = useState<boolean | undefined>();
-	const [metadata, setMetadata] = useState<Metadata>();
+	const [metadata, setMetadata] = useState<Metadata|null>();
 	const [posBar, setPosBar] = useState<number>()
 
 	const openSpotify = async () => {
@@ -45,26 +43,31 @@ function Player() {
 	}
 
 	const seek = async (event: React.MouseEvent<HTMLDivElement>) => {
-		const bar = (event.target as HTMLElement).getBoundingClientRect();
+		const bar = document.getElementsByClassName("bar")[0].getBoundingClientRect();
+		console.log(bar.width, event)
 
 		const x = (event.clientX - bar.left) / bar.width
 		if (metadata) {
-			console.log(x * parseInt(metadata["lengthR"]))
-			await Seek(Math.floor(x * parseInt(metadata["lengthR"])), metadata["trackId"])
+			console.log("millisecond: ", x * parseInt(metadata.lengthR))
+			setPosBar(x * 100)
+			await Seek(Math.floor(x * parseInt(metadata.lengthR)), metadata.trackId)
 		}
-
 	}
 
 
 	const fetchCurrentSong = async () => {
 		try {
 			const result = await CurrentSong();
-			console.log(result)
 			//@ts-ignore
-			setMetadata(result)
-			console.log(result["status"] === "Paused")
-			setStatus(result["status"] === "Playing")
-			if (result["appStatus"] === "closed") {
+			setMetadata((prevMetadata) => {
+				if (prevMetadata?.trackId !== result.trackId) {
+					setPosBar(0);
+				}
+				return result;
+			});
+			console.log(result, metadata);
+			setStatus(result.status === "Playing")
+			if (result.appStatus === "closed") {
 				setAppStatus(false)
 			} else {
 				setAppStatus(true)
@@ -77,8 +80,11 @@ function Player() {
 
 	useEffect(() => {
 		const intervalId = setInterval(fetchCurrentSong, 1000);
+		//const pos_fetch = setInterval(() => {
+		//if (metadata && metadata["position"])
+		//}, 3000);
 
-		return () => clearInterval(intervalId);
+		return () => { clearInterval(intervalId); };
 	}, []);
 
 	useEffect(() => {
@@ -93,19 +99,19 @@ function Player() {
 	return appStatus === true && metadata ? (
 		<div id="App" className='App'>
 			<div className='artContainer'>
-
 				<img src={metadata ? metadata["albumCover"] : logo} id="art" alt="album cover" />
-				<div className='controls'>
-					<button className='playback' onClick={prevSong}><IoPlaySkipBackOutline /></button>
-					<button className='playback' onClick={changeState}>{status ? <IoPauseOutline /> : <IoPlayOutline />}</button>
-					<button className='playback' onClick={nextSong}><IoPlaySkipForwardOutline /></button>
-				</div>
+			</div>
+			<div className='controls'>
+				<button className='playback' onClick={prevSong}><BsFillSkipBackwardFill /></button>
+				<button className='playback' onClick={changeState}>{status ? <BsFillPauseFill /> : <BsFillPlayFill />}</button>
+				<button className='playback' onClick={nextSong}><BsFillSkipForwardFill /></button>
 			</div>
 			<div className='bot'>
 				<div id="title" className="title">{metadata["title"]}</div>
 				<div className='status'>
 					<div onClick={seek} className='bar'>
 						<div className='innerBar' style={{ width: `${posBar}%` }}></div>
+						<div className="seek_ball" style={{left: `${posBar}%`; right: `${}`;}}></div>
 					</div>
 					<div className='position'>
 						<span>{metadata["positionF"]}</span>

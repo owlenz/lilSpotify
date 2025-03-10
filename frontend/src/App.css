@@ -1,143 +1,154 @@
-.App {
-    height: 93vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 10px;
-    padding-bottom: 4px;
+body {
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 }
 
-.home{
-	display:flex;
-	height:100vh;
-	flex-direction:column;
-	justify-content:center;
-	align-items:center;
-	gap:10px
+.App {
+	height: 93vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
+
+.home {
+	display: flex;
+	height: 100vh;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px
 }
 
 .home button {
-	width:170px
+	width: 170px
 }
 
 .artContainer {
-    display: flex;
-    max-width: 84%;
-    max-height: 80%;
-    position: relative;
+	display: flex;
+	max-width: 84%;
+	max-height: 80%;
+	position: relative;
 }
 
 #art {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 4px;
-    transition-duration: 100ms;
+	max-width: 100%;
+	max-height: 100%;
+	border-radius: 4px;
+	transition-duration: 100ms;
 }
 
-.artContainer:hover>#art {
-   filter: blur(2px);
-   transform: scale(1.004)
-}
-
-.artContainer:hover>.controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/*.artContainer:hover>.controls {*/
+/*	display: flex;*/
+/*	justify-content: center;*/
+/*	align-items: center;*/
+/*}*/
 
 .controls {
-    display: flex;
-    gap:10px;
-    z-index: 100;
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    transition-duration: 100ms;
+	display: none;
+	gap: 10px;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	transition-duration: 100ms;
 }
 
 
 .bot {
-    display: flex;
-    flex-direction: column;
-    width: 84%;
-    gap: 9px;
+	display: flex;
+	flex-direction: column;
+	width: 84%;
+	gap: 9px;
 }
 
 .title {
-    text-align: start;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 20px;
-    display: inline-block;
-    width: fit-content;
+	text-align: start;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 20px;
+	font-size: 18px;
+	font-weight: bold;
+	display: inline-block;
+	width: fit-content;
 }
 
 .status {
-    width: 100%;
-    font-size: 12px;
-    font-weight: thin;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-items: center;
+	width: 100%;
+	font-size: 12px;
+	font-weight: thin;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	align-items: center;
 }
 
 .bar {
-    width: 100%;
-    height: 4px;
-    border-radius: 30px;
-    background-color: #4d4d4d;
+	display: flex;
+	position: relative;
+	width: 100%;
+	height: 5px;
+	border-radius: 30px;
+	background-color: #4d4d4d;
 }
 
 .innerBar {
-    height: 100%;
-    border-radius: 30px;
-    background-color: white;
+	height: 100%;
+	border-radius: 30px;
+	background-color: white;
 }
 
-.innerBar:hover {
-	background-color: #231c2f;
+.bar:hover>.innerBar {
+	background-color: green;
 }
+
+
+.seek_ball {
+	display: none;
+	position: absolute;
+	top: -2px;
+	width: 10px;
+	height: 10px;
+	border-radius: 100%;
+	background-color: white;
+}
+
+.bar:hover>.seek_ball {
+	display: block;
+}
+
 
 .position {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    color: #a5a5a5;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	color: #a5a5a5;
 }
 
 .openButton {
-    all: unset;
-    display: inline-block;
-    padding: 2px 8px;
-    font-weight: 600;
-    color: black;
-    border-radius: 2px;
-    appearance: none;
-    background-color: #069c68;
+	all: unset;
+	display: inline-block;
+	padding: 2px 8px;
+	font-weight: 600;
+	color: black;
+	border-radius: 2px;
+	appearance: none;
+	background-color: #069c68;
 }
 
 
 .playback {
-    all:unset;
-    display: flex;
-    align-items:center;
-    justify-content:center;
-    padding: 5px;
-    width: 10%;
-    height: 10%;
-    border-radius:50px;
-    border: 1px solid white;
-    background-color: white;
-    color:black;
-    font-size:2rem;
+	all: unset;
+	display: flex;
+	align-items: end;
+	justify-content: center;
+	padding-bottom: 10px;
+	width: 100%;
+	border-radius: 50px;
+	color: white;
+	font-size: 2rem;
 }
-
-

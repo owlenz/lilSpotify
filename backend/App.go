@@ -37,9 +37,11 @@ func (a *App) Init(method string) bool {
 
 	if method == "api" {
 		api.Config = spotApi.Connect(a.ctx)
+		fmt.Printf("lmaoConfig %+v", api)
+		api.CurrentSong(api.AccessToken)
+	} else {
+		a.CurrentSong()
 	}
-	fmt.Printf("lmaoConfig %+v", api)
-	api.CurrentSong(api.AccessToken)
 	return true
 }
 
@@ -48,9 +50,19 @@ func (a *App) CurrentSong() interface{} {
 	if Method == "api" {
 		xdd := api.CurrentSong(api.AccessToken)
 		return xdd
-	} else {
-
 	}
+
+	_, err := a.is_spot_opened()
+
+	xdd := map[string]string{
+		"appStatus": "closed",
+	}
+	log.Print(xdd)
+
+	if err != nil {
+		return xdd
+	}
+
 	conn, err := dbus.SessionBus()
 	if err != nil {
 		log.Fatalf("Failed to connect to session bus: %v", err)
@@ -62,14 +74,6 @@ func (a *App) CurrentSong() interface{} {
 	obj := conn.Object(spotifyService, spotifyPath)
 
 	variant, err := obj.GetProperty("org.mpris.MediaPlayer2.Player.Metadata")
-
-	xdd := map[string]string{
-		"status": "closed",
-	}
-
-	if err != nil {
-		return xdd
-	}
 
 	metadata := variant.Value().(map[string]dbus.Variant)
 
@@ -111,10 +115,37 @@ func (a *App) CurrentSong() interface{} {
 	return xdd
 }
 
-func (a *App) OpenApp() bool {
-	cmd := exec.Command("spotify-launcher")
+func (a *App) is_spot_opened() (bool, error) {
+	cmd := exec.Command("pgrep", "spotify")
+	_, err := cmd.CombinedOutput()
 
-	cmd.Start()
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (a *App) OpenApp() bool {
+
+	cmd := exec.Command("pacman", "-Q", "spotify")
+	output, err := cmd.CombinedOutput()
+
+	if err != nil {
+		return false
+	}
+
+	fmt.Printf("Package %s is installed: %s\n", "spotify", string(output))
+
+	cmd = exec.Command("setsid", "spotify")
+	err = cmd.Start()
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = cmd.Wait()
+	if err != nil {
+		fmt.Printf("Error waiting for Spotify to finish: %v\n", err)
+	}
 
 	return true
 }
