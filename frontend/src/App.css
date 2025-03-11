@@ -6,6 +6,7 @@ body {
 }
 
 .App {
+	background-color: #0C1114;
 	height: 93vh;
 	width: 100vw;
 	display: flex;
@@ -103,7 +104,7 @@ body {
 }
 
 .bar:hover>.innerBar {
-	background-color: green;
+	background-color: #4E4C67;
 }
 
 

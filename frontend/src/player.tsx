@@ -23,7 +23,7 @@ export type Metadata = {
 function Player() {
 	const [appStatus, setAppStatus] = useState<boolean | undefined>();
 	const [status, setStatus] = useState<boolean | undefined>();
-	const [metadata, setMetadata] = useState<Metadata|null>();
+	const [metadata, setMetadata] = useState<Metadata | null>();
 	const [posBar, setPosBar] = useState<number>()
 
 	const openSpotify = async () => {
@@ -111,7 +111,13 @@ function Player() {
 				<div className='status'>
 					<div onClick={seek} className='bar'>
 						<div className='innerBar' style={{ width: `${posBar}%` }}></div>
-						<div className="seek_ball" style={{left: `${posBar}%`; right: `${}`;}}></div>
+						<div
+							className="seek_ball"
+							style={{
+								left: `calc(${posBar}% - 4px)`,
+								right: '10px',
+							}}
+						></div>
 					</div>
 					<div className='position'>
 						<span>{metadata["positionF"]}</span>
